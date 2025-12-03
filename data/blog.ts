@@ -1,0 +1,28 @@
+export type BlogPost = {
+  id: string;
+  title: string;
+  excerpt: string;
+  image: string;
+};
+
+// نمونه مقالات وبلاگ
+export const blogPosts: BlogPost[] = [
+  {
+    id: "b-1",
+    title: "چطور طلای مناسب استایل رسمی انتخاب کنیم؟",
+    excerpt: "راهنمای انتخاب گردنبند و دستبند برای استایل رسمی و مینیمال با توجه به فرم یقه و رنگ لباس.",
+    image: "/images/blog/blog-1.jpg"
+  },
+  {
+    id: "b-2",
+    title: "هر آنچه درباره شمش پارسیان باید بدانید",
+    excerpt: "بررسی ویژگی‌های شمش پارسیان، شرایط خرید امن، و نکات نگهداری برای سرمایه‌گذاری بلندمدت.",
+    image: "/images/blog/blog-2.jpg"
+  },
+  {
+    id: "b-3",
+    title: "نگهداری و تمیز کردن طلا در خانه",
+    excerpt: "روش‌های ساده و ایمن برای براق کردن زیورآلات بدون آسیب رساندن به بافت و سنگ‌های قیمتی.",
+    image: "/images/blog/blog-3.jpg"
+  }
+];
