@@ -74,7 +74,7 @@ export default function ProductCard({ product }: Props) {
       {/* مشخصات محصول */}
       <div className="space-y-2 px-4 py-4">
         <h3 className="text-base font-semibold text-slate-900">{product.name}</h3>
-        <p className="text-sm text-slate-500">طلا ۱۸ عیار · گالری تاج</p>
+        <p className="text-sm text-slate-500">طلا ۱۸ عیار · گالری تیوانا</p>
         <div className="flex items-center justify-between pt-2">
           <span className="text-lg font-semibold text-navy">
             {priceLabel} <span className="text-sm font-normal text-slate-500">تومان</span>

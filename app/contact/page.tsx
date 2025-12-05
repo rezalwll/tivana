@@ -81,7 +81,7 @@ export default function ContactPage() {
                 value={form.name}
                 onChange={(e) => handleChange("name", e.target.value)}
                 className="w-full rounded-xl border border-slate-200 bg-ivory px-4 py-3 text-sm text-slate-800 outline-none ring-gold/30 transition focus:border-gold focus:ring-2"
-                placeholder="مثال: نیلوفر تاجیک"
+                placeholder="مثال: نیلوفر تیوانایک"
               />
               {errors.name && <p className="mt-2 text-xs text-red-500">{errors.name}</p>}
             </div>

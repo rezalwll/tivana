@@ -5,8 +5,12 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
-  title: "گالری طلا تاج",
-  description: "خرید آنلاین طلا و جواهرات لوکس از گالری تاج"
+  title: "گالری طلا تیوانا",
+  description: "خرید آنلاین طلا و جواهرات لوکس از گالری تیوانا",
+  icons: {
+    icon: '/images/tivanalogo.png',
+    shortcut: '/images/tivanalogo.png'
+  }
 };
 
 export default function RootLayout({

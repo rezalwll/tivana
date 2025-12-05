@@ -6,9 +6,9 @@ export default function Footer() {
       {/* بخش اصلی فوتر */}
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-14 md:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gold">گالری تاج</h3>
+          <h3 className="text-lg font-semibold text-gold">گالری تیوانا</h3>
           <p className="text-sm leading-7 text-slate-200">
-            گالری طلا تاج با الهام از فرهنگ و هنر ایران، مجموعه‌ای از جواهرات دست‌ساز و مدرن را با تضمین اصالت و کیفیت برای لحظات خاص شما ارائه می‌کند.
+            گالری طلا تیوانا با الهام از فرهنگ و هنر ایران، مجموعه‌ای از جواهرات دست‌ساز و مدرن را با تضمین اصالت و کیفیت برای لحظات خاص شما ارائه می‌کند.
           </p>
           <p className="text-sm text-slate-300">
             تجربه خرید لوکس، بسته‌بندی ویژه و ارسال اکسپرس به سراسر کشور.
@@ -62,7 +62,7 @@ export default function Footer() {
       {/* ردیف پایینی کپی‌رایت */}
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-6 text-xs text-slate-300 md:flex-row">
-          <p>© تمامی حقوق برای گالری طلا تاج محفوظ است.</p>
+          <p>© تمامی حقوق برای گالری طلا تیوانا محفوظ است.</p>
           <div className="flex items-center gap-2">
             <span className="h-10 w-16 rounded-md bg-white/10"></span>
             <span className="h-10 w-16 rounded-md bg-white/10"></span>
