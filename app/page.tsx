@@ -35,13 +35,14 @@ type Category = (typeof categories)[number];
 
 function CategoryCard({ cat }: { cat: Category }) {
   return (
-    <button
+    <Link
+      href={`/category/${cat.slug}`}
       className="
         group block w-full overflow-hidden rounded-3xl bg-white p-4
         text-right shadow-sm transition-transform duration-300
       "
     >
-      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl"> 
         <Image
           src={cat.image}
           alt={cat.name}
@@ -53,7 +54,7 @@ function CategoryCard({ cat }: { cat: Category }) {
       <p className="mt-4 text-sm font-semibold text-slate-800 text-center">
         {cat.name}
       </p>
-    </button>
+    </Link>
   );
 }
 
@@ -124,14 +125,14 @@ export default function HomePage() {
           <h3 className="text-3xl font-bold text-navy">
             داستان‌ طلای تیوانا
           </h3>
-          <p className="text-base leading-8 text-slate-600">
+          <p className="text-base leading-9 text-slate-600">
             در کارگاه‌ گالری تیوانا، هر قطعه طلا پیش از آنکه زینت شما شود،
             داستانی از هنر، عشق و ظرافت را طی می‌کند. استادکاران ما با بهره‌گیری
             از تکنیک‌های سنتی و طراحی معاصر، فرم‌هایی را خلق می‌کنند که با هر
             حرکت، نور را به رقص در می‌آورد.
           </p>
-          <p className="text-base leading-8 text-slate-600">
-            از انتخاب آلیاژ تا پرداخت نهایی، هر مرحله با وسواس و دقت انجام
+          <p className="text-base leading-9 text-slate-600">
+            از طراحی  تا پرداخت نهایی، هر مرحله با وسواس و دقت انجام
             می‌شود تا جواهری ماندگار و اصیل به دست شما برسد. اینجا، هر محصول
             امضای دست‌ساز بودن و ضمانت اصالت دارد.
           </p>
@@ -164,7 +165,7 @@ export default function HomePage() {
                   <p className="text-sm text-slate-600">{sectionNotes[slug]}</p>
                 </div>
                 <Link
-                  href="#"
+                  href={`/category/${slug}`}
                   className="text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-8 transition hover:text-gold"
                 >
                   مشاهده همه
@@ -181,7 +182,10 @@ export default function HomePage() {
       </section>
 
       {/* سکشن کلکسیون‌های خاص */}
-      <section className="bg-gradient-to-l from-white via-ivory to-slate-100 py-14">
+      <section
+        id="collections"
+        className="bg-gradient-to-l from-white via-ivory to-slate-100 py-14"
+      >
         <div className="mx-auto max-w-6xl space-y-10 px-4" dir="rtl">
           <div className="text-center">
             <p className="text-sm font-semibold text-gold">

@@ -3,17 +3,29 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { Category } from "@/data/products";
+import { categories } from "@/data/products";
+
+const navCategories = [
+  "zananeh",
+  "mardaneh",
+  "kids",
+  "earring",
+  "necklace",
+  "bracelet",
+  "ring",
+  "parsian",
+] as const;
 
 const navItems = [
-  { label: "زنانه", href: "#" },
-  { label: "مردانه", href: "#" },
-  { label: "بچه‌گانه", href: "#" },
-  { label: "گوشواره", href: "#" },
-  { label: "گردنبند", href: "#" },
-  { label: "دستبند", href: "#" },
-  { label: "انگشتر", href: "#" },
-  { label: "شمش پارسیان", href: "#" },
-  { label: "داستان برند", href: "#brand-story" },
+  ...navCategories
+    .map((slug) => categories.find((cat) => cat.slug === slug))
+    .filter((cat): cat is Category => Boolean(cat))
+    .map((cat) => ({
+      label: cat.name,
+      href: `/category/${cat.slug}`,
+    })),
+  { label: "داستان برند", href: "/#brand-story" },
   { label: "تماس با ما", href: "/contact" },
 ];
 

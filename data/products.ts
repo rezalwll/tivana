@@ -20,7 +20,9 @@ export const categories: Category[] = [
   { slug: "bracelet", name: "دستبند", image: "/images/bracelet1.png" },
   { slug: "ring", name: "انگشتر", image: "/images/ring1.png" },
   { slug: "zananeh", name: "طلای زنانه", image: "/images/22.png" },
-  { slug: "parsian", name: "شمش پارسیان", image: "/images/22.png"}
+  { slug: "mardaneh", name: "طلای مردانه", image: "/images/22.png" },
+  { slug: "parsian", name: "شمش پارسیان", image: "/images/22.png" },
+  { slug: "kids", name: "طلای کودکانه", image: "/images/22.png" }
 ];
 
 // نمونه محصولات برای پیش‌نمایش بخش‌ها
