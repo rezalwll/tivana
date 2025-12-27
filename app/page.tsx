@@ -3,7 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import ProductCard from "@/components/home/ProductCard";
 import { blogPosts } from "@/data/blog";
-import { categories, featuredCategorySlugs, products } from "@/data/products";
+import { categories, products } from "@/data/products";
+import { useRef } from "react";
 
 const sectionNotes: Record<string, string> = {
   zananeh: "جواهرات ظریف و مدرن برای لحظات درخشان شما",
@@ -60,6 +61,16 @@ function CategoryCard({ cat }: { cat: Category }) {
 
 export default function HomePage() {
   const mainCategories = categories.slice(0, 4);
+  const sliderRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const scrollCategory = (slug: string, direction: "prev" | "next") => {
+    const container = sliderRefs.current[slug];
+    if (!container) return;
+
+    const scrollAmount = container.clientWidth * 0.8;
+    const offset = direction === "next" ? scrollAmount : -scrollAmount;
+    container.scrollBy({ left: offset, behavior: "smooth" });
+  };
 
   return (
     <div className="space-y-24 pb-20">
@@ -150,9 +161,9 @@ export default function HomePage() {
 
       {/* پیش‌نمایش محصولات دسته‌های منتخب */}
       <section className="space-y-16">
-        {featuredCategorySlugs.map((slug) => {
-          const title =
-            categories.find((c) => c.slug === slug)?.name ?? "دسته‌بندی";
+        {categories.map((cat) => {
+          const slug = cat.slug;
+          const title = cat.name;
           const list = products.filter((product) => product.category === slug);
           return (
             <div key={slug} className="mx-auto max-w-6xl px-4" dir="rtl">
@@ -171,10 +182,38 @@ export default function HomePage() {
                   مشاهده همه
                 </Link>
               </div>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                {list.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
+              <div className="relative">
+                <div
+                  ref={(el) => (sliderRefs.current[slug] = el)}
+                  className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-3"
+                >
+                  {list.map((product) => (
+                    <div
+                      key={product.id}
+                      className="min-w-[230px] snap-start sm:min-w-[260px] lg:min-w-[280px]"
+                    >
+                      <ProductCard product={product} />
+                    </div>
+                  ))}
+                </div>
+                <div className="pointer-events-none absolute inset-y-0 left-0 right-0 hidden items-center justify-between md:flex">
+                  <button
+                    type="button"
+                    onClick={() => scrollCategory(slug, "prev")}
+                    className="pointer-events-auto mx-1 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-lg text-navy shadow-sm transition hover:border-gold hover:text-gold"
+                    aria-label="Previous products"
+                  >
+                    &lt;
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => scrollCategory(slug, "next")}
+                    className="pointer-events-auto mx-1 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-lg text-navy shadow-sm transition hover:border-gold hover:text-gold"
+                    aria-label="Next products"
+                  >
+                    &gt;
+                  </button>
+                </div>
               </div>
             </div>
           );
