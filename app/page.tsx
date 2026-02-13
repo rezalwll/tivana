@@ -2,7 +2,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import ProductCard from "@/components/home/ProductCard";
-import { blogPosts } from "@/data/blog";
 import { categories, products } from "@/data/products";
 import { useRef } from "react";
 
@@ -281,39 +280,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {blogPosts.map((post) => (
-            <article
-              key={post.id}
-              className="group overflow-hidden rounded-3xl bg-white shadow shadow-black/5 transition hover:-translate-y-1 hover:shadow-luxe"
-            >
-              <div className="relative h-48 w-full overflow-hidden">
-                <Image
-                  src={post.image}
-                  alt={post.title}
-                  fill
-                  sizes="(min-width: 1024px) 32vw, (min-width: 768px) 45vw, 90vw"
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="space-y-3 p-6">
-                <h4 className="text-xl font-semibold text-navy">
-                  {post.title}
-                </h4>
-                <p className="text-sm leading-7 text-slate-600">
-                  {post.excerpt}
-                </p>
-                <Link
-                  href="#"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-8 transition hover:text-gold"
-                >
-                  مطالعه مطلب
-                  <span className="text-lg">↗</span>
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
+        
       </section>
     </div>
   );
