@@ -13,105 +13,76 @@ export type Product = {
   tags?: string[];
 };
 
-// لیست دسته‌بندی‌ها برای بخش‌های مختلف صفحه
 export const categories: Category[] = [
   { slug: "earring", name: "گوشواره", image: "/images/earring1.png" },
   { slug: "necklace", name: "گردنبند", image: "/images/necklace1.png" },
   { slug: "bracelet", name: "دستبند", image: "/images/bracelet1.png" },
   { slug: "ring", name: "انگشتر", image: "/images/ring1.png" },
-  { slug: "parsian", name: "شمش پارسیان", image: "/images/22.png" },
+  { slug: "parsian", name: "شمش پارسیان", image: "/images/storyoftivana3.png" },
 ];
 
-// نمونه محصولات برای پیش‌نمایش بخش‌ها
-export const products: Product[] = [
+const designTitles = [
+  "آرتمیس",
+  "مهتاب",
+  "آرزو",
+  "ساحل",
+  "آبان",
+  "صبا",
+  "باران",
+  "هلیا",
+  "الیزه",
+  "پارلا",
+];
+
+const categoryImagePool: Record<string, string[]> = {
+  earring: ["/images/earring1.png", "/images/storyoftivana3.png", "/images/storyoftivana.png"],
+  necklace: ["/images/necklace1.png", "/images/storyoftivana3.png", "/images/main-section-bg.png"],
+  bracelet: ["/images/bracelet1.png", "/images/storyoftivana.png", "/images/storyoftivana3.png"],
+  ring: ["/images/ring1.png", "/images/storyoftivana3.png", "/images/storyoftivana.png"],
+  parsian: ["/images/storyoftivana3.png", "/images/storyoftivana.png", "/images/main-section-bg.png"],
+};
+
+const pricingConfig: Record<
+  string,
   {
-    id: "p-1",
-    name: "گردنبند رگ مرزی",
-    price: 18400000,
-    image: "/images/22.png",
-    category: "zananeh",
-    tags: ["جدید"]
-  },
-  {
-    id: "p-2",
-    name: "گوشواره میخی پرتو",
-    price: 9200000,
-    image: "/images/22.png",
-    category: "zananeh"
-  },
-  {
-    id: "p-3",
-    name: "دستبند زنجیر هارمونی",
-    price: 11650000,
-    image: "/images/22.png",
-    category: "zananeh"
-  },
-  {
-    id: "p-4",
-    name: "انگشتر الماس خطی",
-    price: 13700000,
-    image: "/images/22.png",
-    category: "zananeh"
-  },
-  {
-    id: "p-5",
-    name: "ساعت و دستبند مردانه آذرخش",
-    price: 22900000,
-    image: "/images/22.png",
-    category: "mardaneh"
-  },
-  {
-    id: "p-6",
-    name: "زنجیر کارتیر پهن",
-    price: 18500000,
-    image: "/images/22.png",
-    category: "mardaneh",
-    tags: ["پرفروش"]
-  },
-  {
-    id: "p-7",
-    name: "شمش پارسیان ۱۰ گرمی",
-    price: 15280000,
-    image: "/images/22.png",
-    category: "parsian",
-    tags: ["سرمایه‌گذاری"]
-  },
-  {
-    id: "p-8",
-    name: "شمش پارسیان ۲۰ گرمی",
-    price: 30460000,
-    image: "/images/22.png",
-    category: "parsian"
-  },
-  {
-    id: "p-9",
-    name: "پک هدایای تولد دخترانه",
-    price: 7800000,
-    image: "/images/22.png",
-    category: "kids"
-  },
-  {
-    id: "p-10",
-    name: "دستبند ظریف کودک تیوانا",
-    price: 5200000,
-    image: "/images/22.png",
-    category: "kids"
-  },
-  {
-    id: "p-11",
-    name: "گردنبند صلیبی استار",
-    price: 12800000,
-    image: "/images/22.png",
-    category: "mardaneh"
-  },
-  {
-    id: "p-12",
-    name: "پک نامزدی الماسه",
-    price: 45800000,
-    image: "/images/22.png",
-    category: "zananeh",
-    tags: ["ویژه"]
+    basePrice: number;
+    step: number;
   }
-];
+> = {
+  earring: { basePrice: 8_300_000, step: 390_000 },
+  necklace: { basePrice: 10_900_000, step: 460_000 },
+  bracelet: { basePrice: 9_200_000, step: 420_000 },
+  ring: { basePrice: 11_600_000, step: 500_000 },
+  parsian: { basePrice: 15_000_000, step: 1_250_000 },
+};
 
-export const featuredCategorySlugs = ["zananeh", "mardaneh", "parsian", "kids"];
+const categoryLabel = (slug: string) =>
+  categories.find((category) => category.slug === slug)?.name ?? slug;
+
+const buildCategoryProducts = (slug: string): Product[] => {
+  const images = categoryImagePool[slug] ?? ["/images/storyoftivana.png"];
+  const pricing = pricingConfig[slug] ?? { basePrice: 10_000_000, step: 350_000 };
+  const label = categoryLabel(slug);
+
+  return Array.from({ length: 10 }, (_, index) => ({
+    id: `${slug}-${index + 1}`,
+    name: `${label} مدل ${designTitles[index]}`,
+    price: pricing.basePrice + index * pricing.step,
+    image: images[index % images.length],
+    category: slug,
+    tags:
+      index === 0
+        ? ["جدید"]
+        : index === 1
+          ? ["پرفروش"]
+          : index === 2
+            ? ["پیشنهادی"]
+            : undefined,
+  }));
+};
+
+export const products: Product[] = categories.flatMap((category) =>
+  buildCategoryProducts(category.slug)
+);
+
+export const featuredCategorySlugs = ["earring", "necklace", "bracelet", "ring"];
