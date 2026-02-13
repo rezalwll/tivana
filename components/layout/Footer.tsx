@@ -19,9 +19,9 @@ export default function Footer() {
           <h4 className="mb-4 text-sm font-semibold text-gold">لینک‌های مهم</h4>
           <ul className="space-y-3 text-sm text-slate-200">
             <li><Link href="/" className="transition hover:text-gold">خانه</Link></li>
-            <li><Link href="#" className="transition hover:text-gold">دسته‌بندی‌ها</Link></li>
-            <li><Link href="#" className="transition hover:text-gold">کلکسیون‌ها</Link></li>
-            <li><Link href="#brand-story" className="transition hover:text-gold">داستان برند</Link></li>
+            <li><Link href="/#categories" className="transition hover:text-gold">دسته‌بندی‌ها</Link></li>
+            <li><Link href="/#collections" className="transition hover:text-gold">کلکسیون‌ها</Link></li>
+            <li><Link href="/#brand-story" className="transition hover:text-gold">داستان برند</Link></li>
             <li><Link href="/contact" className="transition hover:text-gold">تماس با ما</Link></li>
           </ul>
         </div>
