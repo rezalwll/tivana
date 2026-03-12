@@ -39,6 +39,12 @@ function CategoryCard({ cat }: { cat: Category }) {
 export default function HomePage() {
   const mainCategories = categories.slice(0, 4);
   const sliderRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const dragState = useRef({
+    isDragging: false,
+    startX: 0,
+    scrollLeft: 0,
+    hasMoved: false,
+  });
 
   const scrollCategory = (slug: string, direction: "prev" | "next") => {
     const container = sliderRefs.current[slug];
@@ -47,6 +53,50 @@ export default function HomePage() {
     const scrollAmount = container.clientWidth * 0.8;
     const offset = direction === "next" ? scrollAmount : -scrollAmount;
     container.scrollBy({ left: offset, behavior: "smooth" });
+  };
+
+  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+    const container = event.currentTarget;
+    dragState.current.isDragging = true;
+    dragState.current.startX = event.clientX;
+    dragState.current.scrollLeft = container.scrollLeft;
+    dragState.current.hasMoved = false;
+    container.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragState.current.isDragging) return;
+    const container = event.currentTarget;
+    const delta = event.clientX - dragState.current.startX;
+    if (Math.abs(delta) > 4) {
+      dragState.current.hasMoved = true;
+    }
+    container.scrollLeft = dragState.current.scrollLeft - delta;
+    event.preventDefault();
+  };
+
+  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragState.current.isDragging) return;
+    dragState.current.isDragging = false;
+    event.currentTarget.releasePointerCapture(event.pointerId);
+  };
+
+  const handlePointerCancel = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!dragState.current.isDragging) return;
+    dragState.current.isDragging = false;
+    event.currentTarget.releasePointerCapture(event.pointerId);
+  };
+
+  const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleClickCapture = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!dragState.current.hasMoved) return;
+    event.preventDefault();
+    event.stopPropagation();
+    dragState.current.hasMoved = false;
   };
 
   return (
@@ -140,12 +190,18 @@ export default function HomePage() {
               <div className="relative">
                 <div
                   ref={(el) => (sliderRefs.current[slug] = el)}
-                  className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-3"
+                  className="no-scrollbar flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-3 cursor-grab select-none active:cursor-grabbing"
+                  onPointerDown={handlePointerDown}
+                  onPointerMove={handlePointerMove}
+                  onPointerUp={handlePointerUp}
+                  onPointerCancel={handlePointerCancel}
+                  onDragStartCapture={handleDragStart}
+                  onClickCapture={handleClickCapture}
                 >
                   {list.map((product) => (
                     <div
                       key={product.id}
-                      className="min-w-[230px] snap-start sm:min-w-[260px] lg:min-w-[280px]"
+                      className="snap-start shrink-0 basis-full sm:basis-[calc((100%-1rem)/2)] lg:basis-[calc((100%-3rem)/4)]"
                     >
                       <ProductCard product={product} />
                     </div>
@@ -155,16 +211,16 @@ export default function HomePage() {
                 <div className="pointer-events-none absolute inset-y-0 left-0 right-0 hidden items-center justify-between md:flex">
                   <button
                     type="button"
-                    onClick={() => scrollCategory(slug, "prev")}
-                    className="pointer-events-auto mx-1 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-lg text-navy shadow-sm transition hover:border-gold hover:text-gold"
+                    onClick={() => scrollCategory(slug, "next")}
+                    className="pointer-events-auto mx-1 flex h-10 w-10 items-center justify-center rounded-full border text-lg transition border-gold text-gold hover:bg-gold hover:text-black"
                     aria-label="Previous products"
                   >
                     &lt;
                   </button>
                   <button
                     type="button"
-                    onClick={() => scrollCategory(slug, "next")}
-                    className="pointer-events-auto mx-1 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-lg text-navy shadow-sm transition hover:border-gold hover:text-gold"
+                    onClick={() => scrollCategory(slug, "prev")}
+                    className="pointer-events-auto mx-1 flex h-10 w-10 items-center justify-center rounded-full border text-lg transition border-gold text-gold hover:bg-gold hover:text-black"
                     aria-label="Next products"
                   >
                     &gt;

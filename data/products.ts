@@ -10,7 +10,6 @@ export type Product = {
   price: number;
   image: string;
   category: string;
-  tags?: string[];
 };
 
 export const categories: Category[] = [
@@ -70,14 +69,6 @@ const buildCategoryProducts = (slug: string): Product[] => {
     price: pricing.basePrice + index * pricing.step,
     image: images[index % images.length],
     category: slug,
-    tags:
-      index === 0
-        ? ["جدید"]
-        : index === 1
-          ? ["پرفروش"]
-          : index === 2
-            ? ["پیشنهادی"]
-            : undefined,
   }));
 };
 

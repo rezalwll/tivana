@@ -29,3 +29,12 @@ a {
 ::selection {
   background-color: rgba(212, 175, 55, 0.25);
 }
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

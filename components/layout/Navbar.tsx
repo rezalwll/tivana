@@ -17,19 +17,21 @@ const navCategoryOrder = [
 ] as const;
 
 const navItems = [
+  
+  { label: "تماس با ما", href: "/contact" },
   ...navCategoryOrder
     .map((slug) => categories.find((category) => category.slug === slug))
     .filter((category): category is Category => Boolean(category))
     .map((category) => ({
       label: category.name,
       href: `/category/${category.slug}`,
-    })),
-  { label: "تماس با ما", href: "/contact" },
+    }))
 ];
 
 const GOLD_PRICE_API_URL =
   "https://api.tgju.org/v1/market/list-data?category_ids=91818&extra_data=1&lang=fa";
 const GOLD_PRICE_REFRESH_INTERVAL_MS = 10_000;
+const NAVBAR_SCROLLED_STORAGE_KEY = "tivana.navbar.scrolled";
 
 type GoldPriceResponse = {
   data?: unknown;
@@ -54,14 +56,40 @@ export default function Navbar() {
   const { totalFavorites } = useFavorites();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [transitionsReady, setTransitionsReady] = useState(false);
   const [goldPrice, setGoldPrice] = useState<number | null>(null);
   const [isGoldPriceLoading, setIsGoldPriceLoading] = useState(true);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    onScroll();
-    window.addEventListener("scroll", onScroll);
+    const getInitialScrolled = () => {
+      const savedScrolled = window.sessionStorage.getItem(NAVBAR_SCROLLED_STORAGE_KEY);
+      if (savedScrolled === "true") {
+        return true;
+      }
+      if (savedScrolled === "false") {
+        return false;
+      }
+      return window.scrollY > 60;
+    };
+
+    const setAndPersistScrolled = (value: boolean) => {
+      setScrolled(value);
+      window.sessionStorage.setItem(NAVBAR_SCROLLED_STORAGE_KEY, value ? "true" : "false");
+    };
+
+    setAndPersistScrolled(getInitialScrolled());
+
+    const onScroll = () => setAndPersistScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const animationFrame = window.requestAnimationFrame(() => {
+      setTransitionsReady(true);
+    });
+
+    return () => window.cancelAnimationFrame(animationFrame);
   }, []);
 
   useEffect(() => {
@@ -132,12 +160,13 @@ export default function Navbar() {
   const rightSideClasses = scrolled
     ? "bg-white text-slate-900 shadow-lg shadow-black/5"
     : "bg-transparent text-slate-900";
-  const iconClasses = scrolled ? "text-slate-900" : "text-white";
+  const iconClasses = scrolled ? "text-slate-900" : "text-gold";
+  const transitionClasses = transitionsReady ? "transition-colors duration-300" : "";
 
   return (
     <nav dir="ltr" className="fixed inset-x-0 top-0 z-50">
       <div
-        className={`mx-auto flex items-center gap-4 px-4 py-4 transition-colors duration-300 sm:px-8 lg:px-10 ${rightSideClasses} supports-[backdrop-filter]:backdrop-blur-sm`}
+        className={`mx-auto flex items-center gap-4 px-4 py-4 sm:px-8 lg:px-10 ${transitionClasses} ${rightSideClasses}`}
       >
         <Link href="/" className="flex items-center gap-3 text-lg font-semibold tracking-wide">
           <Image
@@ -156,13 +185,13 @@ export default function Navbar() {
         <div className="hidden items-center gap-3 lg:flex">
           <Link
             href="/favorites"
-            className={`relative flex items-center ${iconClasses}`}
+            className={`relative flex items-center  ${iconClasses}`}
             aria-label="علاقه‌مندی‌ها"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 transition hover:text-gold"
-              fill={totalFavorites > 0 ? "#d4af37" : "none"}
+              className="h-6 w-6 transition"
+              fill={"none"}
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth={1.5}
@@ -262,7 +291,7 @@ export default function Navbar() {
 
           <Link
             href="/cart"
-            className="mb-3 flex items-center justify-between rounded-lg bg-navy px-3 py-2 text-sm font-semibold text-white"
+            className="mb-3 flex items-center justify-between rounded-lg bg-navy px-3 py-2 text-sm font-semibold text-gold"
             onClick={() => setOpen(false)}
           >
             <span>سبد خرید</span>
@@ -287,4 +316,3 @@ export default function Navbar() {
     </nav>
   );
 }
-

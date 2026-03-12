@@ -25,37 +25,23 @@ export default function ProductCard({ product }: Props) {
   );
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl bg-white shadow shadow-black/5 transition hover:-translate-y-1 hover:shadow-luxe">
+    <div className="group relative overflow-hidden rounded-2xl bg-white shadow shadow-black/5 transition ">
       <div className="relative h-56 w-full overflow-hidden">
         <Image
           src={product.image}
           alt={product.name}
           fill
           sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          className="h-full w-full object-cover transition duration-500"
         />
-
-        {product.tags?.length ? (
-          <div className="absolute right-3 top-3 flex flex-wrap gap-2">
-            {product.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full bg-black/60 px-3 py-1 text-xs font-semibold text-gold backdrop-blur"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        ) : null}
 
         <div className="absolute left-3 top-3 flex flex-col gap-2">
           <button
             onClick={() => toggleFavorite(product.id)}
             aria-pressed={favorite}
             aria-label={favorite ? "حذف از علاقه‌مندی" : "افزودن به علاقه‌مندی"}
-            className={`flex h-10 w-10 items-center justify-center rounded-full bg-white/85 text-sm font-semibold transition hover:bg-white ${
-              favorite ? "text-gold" : "text-slate-800"
-            }`}
+            className={`flex h-10 w-10 items-center justify-center rounded-full bg-white/85 text-sm font-semibold transition hover:bg-white ${favorite ? "text-gold" : "text-gold"
+              }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -76,9 +62,8 @@ export default function ProductCard({ product }: Props) {
           <button
             onClick={() => addItem(product.id)}
             aria-label={inCart ? "افزایش تعداد در سبد" : "افزودن به سبد"}
-            className={`flex h-10 w-10 items-center justify-center rounded-full bg-white/85 transition hover:bg-white ${
-              inCart ? "text-gold" : "text-slate-800"
-            }`}
+            className={`flex h-10 w-10 items-center justify-center rounded-full bg-white/85 transition hover:bg-white ${inCart ? "text-gold" : "text-slate-800"
+              }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

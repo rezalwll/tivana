@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import localFont from "next/font/local";
+import { cookies } from "next/headers";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -38,13 +39,15 @@ export default function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const initialNavbarScrolled = cookies().get("tivana_navbar_scrolled")?.value === "1";
+
   return (
     <html lang="fa" dir="rtl">
       <body className={`${iranYekan.variable} bg-ivory text-slate-800 antialiased`}>
         <CartProvider>
           <FavoritesProvider>
             <div className="flex min-h-screen flex-col">
-              <Navbar />
+              <Navbar initialScrolled={initialNavbarScrolled} />
               <main className="flex-1 pt-28 lg:pt-32">{children}</main>
               <Footer />
             </div>
