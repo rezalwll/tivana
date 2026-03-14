@@ -17,7 +17,7 @@ const navCategoryOrder = [
 ] as const;
 
 const navItems = [
-  
+
   { label: "تماس با ما", href: "/contact" },
   ...navCategoryOrder
     .map((slug) => categories.find((category) => category.slug === slug))
@@ -211,7 +211,7 @@ export default function Navbar() {
 
           <Link
             href="/cart"
-            className={`relative flex items-center ${iconClasses}`}
+            className={`relative flex items-center ${iconClasses} pt-2`}
             aria-label="سبد خرید"
           >
             <svg
@@ -235,7 +235,7 @@ export default function Navbar() {
               />
             </svg>
             {totalItems > 0 ? (
-              <span className="absolute -left-2 -top-2 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-gold px-1 text-xs font-bold text-navy">
+              <span className="absolute -left-2 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-gold px-1 text-xs font-bold text-navy">
                 {cartCount}
               </span>
             ) : null}

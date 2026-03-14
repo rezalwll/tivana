@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Footer() {
@@ -6,7 +7,21 @@ export default function Footer() {
       {/* بخش اصلی فوتر */}
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-14 md:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gold">گالری تیوانا</h3>
+          <Link href="/" className="flex items-center gap-3 text-lg font-semibold tracking-wide">
+            <Image
+              src="/images/tivanalogo.png"
+              alt="Tivana logo"
+              width={80}
+              height={80}
+              className="h-10 w-10 rounded-full object-cover"
+              priority
+            />
+            <span className="hidden text-base font-semibold text-gold sm:inline">
+              گالری طلای تیوانا
+            </span>
+          </Link>
+          <h3 className="text-lg font-semibold text-gold"></h3>
+
           <p className="text-sm leading-7 text-slate-200">
             گالری طلا تیوانا با الهام از فرهنگ و هنر ایران، مجموعه‌ای از جواهرات دست‌ساز و مدرن را با تضمین اصالت و کیفیت برای لحظات خاص شما ارائه می‌کند.
           </p>
@@ -40,19 +55,19 @@ export default function Footer() {
           <h4 className="mb-4 text-sm font-semibold text-gold">خدمات ویژه</h4>
           <div className="space-y-2">
             <div className="flex items-start gap-2">
-              <span className="mt-1 h-2 w-2 rounded-full bg-gold"></span>
+              <span className="mt-2 h-2 w-2 rounded-full bg-gold"></span>
               <span>ارسال امن و بیمه‌شده به سراسر کشور</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="mt-1 h-2 w-2 rounded-full bg-gold"></span>
+              <span className="mt-2 h-2 w-2 rounded-full bg-gold"></span>
               <span>تضمین اصالت و فاکتور رسمی</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="mt-1 h-2 w-2 rounded-full bg-gold"></span>
+              <span className="mt-2 h-2 w-2 rounded-full bg-gold"></span>
               <span>امکان تعویض و سایز رایگان</span>
             </div>
             <div className="flex items-start gap-2">
-              <span className="mt-1 h-2 w-2 rounded-full bg-gold"></span>
+              <span className="mt-2 h-2 w-2 rounded-full bg-gold"></span>
               <span>پشتیبانی اختصاصی و مشاوره خرید</span>
             </div>
           </div>
@@ -63,11 +78,6 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-6 text-xs text-slate-300 md:flex-row">
           <p>© تمامی حقوق برای گالری طلا تیوانا محفوظ است.</p>
-          <div className="flex items-center gap-2">
-            <span className="h-10 w-16 rounded-md bg-white/10"></span>
-            <span className="h-10 w-16 rounded-md bg-white/10"></span>
-            <span className="h-10 w-16 rounded-md bg-white/10"></span>
-          </div>
         </div>
       </div>
     </footer>

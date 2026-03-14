@@ -173,7 +173,7 @@ export default function HomePage() {
             <div key={slug} className="mx-auto max-w-6xl px-4" dir="rtl">
               <div className="mb-6 flex items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm font-semibold text-gold">منتخب {title}</p>
+                
                   <h3 className="text-2xl font-bold text-navy">{title}</h3>
                   <p className="text-sm text-slate-600">
                     {sectionNotes[slug] ?? "منتخبی از محصولات این دسته‌بندی"}
