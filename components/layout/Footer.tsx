@@ -1,85 +1,31 @@
 import Image from "next/image";
 import Link from "next/link";
+import { businessContact } from "@/config/business";
+import { categories } from "@/data/products";
 
 export default function Footer() {
+  const currentYear = new Intl.DateTimeFormat("fa-IR-u-ca-persian", { year: "numeric" }).format(new Date());
+
   return (
-    <footer className="bg-navy text-white">
-      {/* بخش اصلی فوتر */}
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-14 md:grid-cols-2 lg:grid-cols-4">
-        <div className="space-y-4">
-          <Link href="/" className="flex items-center gap-3 text-lg font-semibold tracking-wide">
-            <Image
-              src="/images/tivanalogo.png"
-              alt="Tivana logo"
-              width={80}
-              height={80}
-              className="h-10 w-10 rounded-full object-cover"
-              priority
-            />
-            <span className="hidden text-base font-semibold text-gold sm:inline">
-              گالری طلای تیوانا
-            </span>
-          </Link>
-          <h3 className="text-lg font-semibold text-gold"></h3>
-
-          <p className="text-sm leading-7 text-slate-200">
-            گالری طلا تیوانا با الهام از فرهنگ و هنر ایران، مجموعه‌ای از جواهرات دست‌ساز و مدرن را با تضمین اصالت و کیفیت برای لحظات خاص شما ارائه می‌کند.
-          </p>
-          <p className="text-sm text-slate-300">
-            تجربه خرید لوکس، بسته‌بندی ویژه و ارسال اکسپرس به سراسر کشور.
-          </p>
+    <footer className="bg-navy text-white" dir="rtl">
+      <div className="mx-auto max-w-7xl px-4 pt-16">
+        <div className="flex flex-col justify-between gap-6 border-b border-white/10 pb-10 md:flex-row md:items-center">
+          <div><p className="text-xs font-semibold tracking-[.2em] text-gold">TIVANA GOLD GALLERY</p><h2 className="mt-3 text-2xl font-bold">درخشش ساده، انتخاب ماندگار</h2></div>
+          <Link href="/shop" className="inline-flex w-fit rounded-full bg-gold px-6 py-3 text-sm font-semibold text-navy">مشاهده فروشگاه</Link>
         </div>
 
-        <div>
-          <h4 className="mb-4 text-sm font-semibold text-gold">لینک‌های مهم</h4>
-          <ul className="space-y-3 text-sm text-slate-200">
-            <li><Link href="/" className="transition hover:text-gold">خانه</Link></li>
-            <li><Link href="/#categories" className="transition hover:text-gold">دسته‌بندی‌ها</Link></li>
-            <li><Link href="/#collections" className="transition hover:text-gold">کلکسیون‌ها</Link></li>
-            <li><Link href="/#brand-story" className="transition hover:text-gold">داستان برند</Link></li>
-            <li><Link href="/contact" className="transition hover:text-gold">تماس با ما</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="mb-4 text-sm font-semibold text-gold">راه‌های ارتباط</h4>
-          <ul className="space-y-3 text-sm text-slate-200">
-            <li>تلفن: ۰۲۱-۴۱۲۳۴</li>
-            <li>واتساپ: ۰۹۲۱۰۰۰۰۰۰۰</li>
-            <li>اینستاگرام: @tajgallery</li>
-            <li>آدرس: تهران، خیابان ولیعصر، پلاک ۱۲۳</li>
-          </ul>
-        </div>
-
-        <div className="space-y-3 text-sm text-slate-200">
-          <h4 className="mb-4 text-sm font-semibold text-gold">خدمات ویژه</h4>
-          <div className="space-y-2">
-            <div className="flex items-start gap-2">
-              <span className="mt-2 h-2 w-2 rounded-full bg-gold"></span>
-              <span>ارسال امن و بیمه‌شده به سراسر کشور</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="mt-2 h-2 w-2 rounded-full bg-gold"></span>
-              <span>تضمین اصالت و فاکتور رسمی</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="mt-2 h-2 w-2 rounded-full bg-gold"></span>
-              <span>امکان تعویض و سایز رایگان</span>
-            </div>
-            <div className="flex items-start gap-2">
-              <span className="mt-2 h-2 w-2 rounded-full bg-gold"></span>
-              <span>پشتیبانی اختصاصی و مشاوره خرید</span>
-            </div>
+        <div className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="space-y-5">
+            <Link href="/" className="flex items-center gap-3"><Image src="/images/tivanalogo.webp" alt="نشان تیوانا" width={589} height={758} className="h-12 w-auto object-contain"/><span className="font-semibold text-gold">گالری طلای تیوانا</span></Link>
+            <p className="text-sm leading-7 text-slate-300">زیورآلات طلای ۱۸ عیار با طراحی مینیمال برای استفاده روزمره، هدیه و لحظه‌های ماندگار.</p>
+            <p className="text-xs leading-6 text-slate-400">قیمت‌ها پس از تأیید نرخ روز، وزن دقیق و موجودی نهایی می‌شوند.</p>
           </div>
+          <div><h3 className="mb-5 text-sm font-bold text-gold">فروشگاه</h3><ul className="space-y-3 text-sm text-slate-300"><li><Link href="/shop" className="hover:text-gold">همه محصولات</Link></li>{categories.map((category) => <li key={category.slug}><Link href={`/category/${category.slug}`} className="hover:text-gold">{category.name}</Link></li>)}</ul></div>
+          <div><h3 className="mb-5 text-sm font-bold text-gold">راهنمای مشتریان</h3><ul className="space-y-3 text-sm text-slate-300"><li><Link href="/guide" className="hover:text-gold">راهنمای خرید و سایز</Link></li><li><Link href="/shipping" className="hover:text-gold">ثبت درخواست و ارسال</Link></li><li><Link href="/faq" className="hover:text-gold">پرسش‌های متداول</Link></li><li><Link href="/favorites" className="hover:text-gold">علاقه‌مندی‌ها</Link></li></ul></div>
+          <div><h3 className="mb-5 text-sm font-bold text-gold">تیوانا</h3><ul className="space-y-3 text-sm text-slate-300"><li><Link href="/about" className="hover:text-gold">درباره ما</Link></li><li><Link href="/contact" className="hover:text-gold">تماس و مشاوره</Link></li><li><Link href="/cart" className="hover:text-gold">سبد درخواست خرید</Link></li>{businessContact.phone ? <li><a dir="ltr" href={`tel:${businessContact.phone}`} className="inline-block hover:text-gold">{businessContact.phone}</a></li> : null}{businessContact.instagramUrl ? <li><a dir="ltr" href={businessContact.instagramUrl} target="_blank" rel="noreferrer" className="inline-block hover:text-gold">@{businessContact.instagramHandle}</a></li> : null}{businessContact.email ? <li><a dir="ltr" href={`mailto:${businessContact.email}`} className="inline-block break-all hover:text-gold">{businessContact.email}</a></li> : null}{businessContact.city ? <li>{businessContact.city}</li> : null}</ul><div className="mt-6 rounded-2xl border border-white/10 p-4 text-xs leading-6 text-slate-400">برای امنیت خرید، مبلغ و روش پرداخت فقط پس از تأیید مستقیم درخواست اعلام می‌شود.</div></div>
         </div>
       </div>
-
-      {/* ردیف پایینی کپی‌رایت */}
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-6 text-xs text-slate-300 md:flex-row">
-          <p>© تمامی حقوق برای گالری طلا تیوانا محفوظ است.</p>
-        </div>
-      </div>
+      <div className="border-t border-white/10"><div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-6 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between"><p>© {currentYear} گالری طلای تیوانا</p><p>تمامی حقوق محفوظ است.</p></div></div>
     </footer>
   );
 }

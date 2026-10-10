@@ -6,31 +6,37 @@ import ProductCard from "@/components/home/ProductCard";
 import { categories, products } from "@/data/products";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export function generateStaticParams() {
   return categories.map(({ slug }) => ({ slug }));
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const category = categories.find((cat) => cat.slug === params.slug);
-  const title = category
-    ? `${category.name} | گالری طلا تیوانا`
-    : "دسته‌بندی";
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const category = categories.find((cat) => cat.slug === slug);
+  const title = category ? category.name : "دسته‌بندی";
 
   return {
     title,
     description: category
       ? `محصولات ${category.name} در گالری تیوانا`
       : "محصولات گالری طلا تیوانا",
+    alternates: category ? { canonical: `/category/${category.slug}` } : undefined,
+    openGraph: category ? {
+      title: category.name,
+      description: category.description,
+      images: [{ url: category.image, alt: category.name }],
+    } : undefined,
   };
 }
 
-export default function CategoryPage({ params }: PageProps) {
-  const category = categories.find((cat) => cat.slug === params.slug);
+export default async function CategoryPage({ params }: PageProps) {
+  const { slug } = await params;
+  const category = categories.find((cat) => cat.slug === slug);
   if (!category) {
     notFound();
   }
@@ -45,10 +51,7 @@ export default function CategoryPage({ params }: PageProps) {
           <div className="space-y-4">
             <p className="text-sm font-semibold text-gold">دسته‌بندی</p>
             <h1 className="text-3xl font-bold text-navy">{category.name}</h1>
-            <p className="text-sm leading-7 text-slate-600">
-              تمام محصولات این دسته‌بندی را اینجا می‌بینید. برای جابه‌جایی
-              سریع، از میانبرهای دسته‌بندی استفاده کنید.
-            </p>
+            <p className="max-w-xl text-sm leading-8 text-slate-600">{category.description}</p>
             <div className="flex flex-wrap gap-3 pt-2">
               {otherCategories.map((cat) => (
                 <Link
@@ -67,6 +70,7 @@ export default function CategoryPage({ params }: PageProps) {
               src={category.image}
               alt={category.name}
               fill
+              priority
               sizes="(min-width: 1024px) 40vw, (min-width: 768px) 50vw, 90vw"
               className="h-full w-full object-cover"
             />
@@ -79,7 +83,7 @@ export default function CategoryPage({ params }: PageProps) {
           <p className="text-sm font-semibold text-gold">
             محصولات {category.name}
           </p>
-          <h2 className="text-2xl font-bold text-navy">گزیده محصولات</h2>
+          <h2 className="text-2xl font-bold text-navy">{new Intl.NumberFormat("fa-IR").format(items.length)} انتخاب از این کلکسیون</h2>
         </div>
         <Link
           href="/#categories"
@@ -90,7 +94,7 @@ export default function CategoryPage({ params }: PageProps) {
       </div>
 
       {items.length ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

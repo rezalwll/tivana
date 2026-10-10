@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useCart } from "@/components/cart/CartProvider";
 import { useFavorites } from "@/components/favorites/FavoritesProvider";
@@ -17,20 +18,19 @@ const navCategoryOrder = [
 ] as const;
 
 const navItems = [
-
-  { label: "تماس با ما", href: "/contact" },
-  ...navCategoryOrder
+  { label: "فروشگاه", href: "/shop" },
+  ...navCategoryOrder.slice(0, 4)
     .map((slug) => categories.find((category) => category.slug === slug))
     .filter((category): category is Category => Boolean(category))
-    .map((category) => ({
-      label: category.name,
-      href: `/category/${category.slug}`,
-    }))
+    .map((category) => ({ label: category.name, href: `/category/${category.slug}` })),
+  { label: "راهنمای خرید", href: "/guide" },
+  { label: "درباره ما", href: "/about" },
+  { label: "تماس", href: "/contact" },
 ];
 
 const GOLD_PRICE_API_URL =
   "https://api.tgju.org/v1/market/list-data?category_ids=91818&extra_data=1&lang=fa";
-const GOLD_PRICE_REFRESH_INTERVAL_MS = 10_000;
+const GOLD_PRICE_REFRESH_INTERVAL_MS = 60_000;
 const NAVBAR_SCROLLED_STORAGE_KEY = "tivana.navbar.scrolled";
 
 type GoldPriceResponse = {
@@ -51,10 +51,11 @@ const parseTomanPrice = (priceHtml: string): number | null => {
   return Math.round(rialValue / 10);
 };
 
-export default function Navbar() {
+export default function Navbar({ initialScrolled = false }: { initialScrolled?: boolean }) {
+  const pathname = usePathname();
   const { totalItems } = useCart();
   const { totalFavorites } = useFavorites();
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(initialScrolled);
   const [open, setOpen] = useState(false);
   const [transitionsReady, setTransitionsReady] = useState(false);
   const [goldPrice, setGoldPrice] = useState<number | null>(null);
@@ -83,6 +84,16 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [open]);
 
   useEffect(() => {
     const animationFrame = window.requestAnimationFrame(() => {
@@ -157,28 +168,29 @@ export default function Navbar() {
     [totalFavorites]
   );
 
-  const rightSideClasses = scrolled
-    ? "bg-white text-slate-900 shadow-lg shadow-black/5"
-    : "bg-transparent text-slate-900";
-  const iconClasses = scrolled ? "text-slate-900" : "text-gold";
+  const solidNavbar = scrolled || pathname !== "/";
+  const rightSideClasses = solidNavbar
+    ? "bg-white/95 text-slate-900 shadow-lg shadow-black/5 backdrop-blur"
+    : "bg-navy/20 text-white backdrop-blur-sm";
+  const iconClasses = solidNavbar ? "text-slate-900" : "text-gold";
   const transitionClasses = transitionsReady ? "transition-colors duration-300" : "";
 
   return (
-    <nav dir="ltr" className="fixed inset-x-0 top-0 z-50">
+    <nav dir="ltr" className="fixed inset-x-0 top-0 z-50" aria-label="ناوبری اصلی">
       <div
-        className={`mx-auto flex items-center gap-4 px-4 py-4 sm:px-8 lg:px-10 ${transitionClasses} ${rightSideClasses}`}
+        className={`mx-auto flex items-center gap-4 px-4 py-3 sm:px-8 lg:px-10 ${transitionClasses} ${rightSideClasses}`}
       >
         <Link href="/" className="flex items-center gap-3 text-lg font-semibold tracking-wide">
           <Image
-            src="/images/tivanalogo.png"
-            alt="Tivana logo"
-            width={80}
-            height={80}
-            className="h-10 w-10 rounded-full object-cover"
+            src="/images/tivanalogo.webp"
+            alt="نشان تیوانا"
+            width={589}
+            height={758}
+            className="h-10 w-auto object-contain"
             priority
           />
           <span className="hidden text-base font-semibold text-gold sm:inline">
-            Tivana gold gallery
+            TIVANA
           </span>
         </Link>
 
@@ -242,16 +254,16 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="ms-auto flex items-center gap-20 lg:gap-20">
-          <div dir="rtl" className="hidden text-sm font-semibold xl:flex">
-            قیمت روز طلا:
-            <span className="mr-2 text-slate-900">{goldPriceText}</span>
+        <div className="ms-auto flex items-center gap-6 xl:gap-10">
+          <div dir="rtl" className="hidden text-sm font-semibold xl:flex" aria-live="polite">
+            نرخ ۱۸ عیار:
+            <span className={solidNavbar ? "mr-2 text-slate-900" : "mr-2 text-white"}>{goldPriceText}</span>
           </div>
 
-          <ul className="hidden items-center gap-5 text-sm font-medium lg:flex">
+          <ul className="hidden items-center gap-4 text-xs font-medium lg:flex xl:gap-5 xl:text-sm">
             {navItems.map((item) => (
               <li key={item.label}>
-                <Link href={item.href} className="transition hover:text-gold">
+                <Link href={item.href} aria-current={pathname === item.href ? "page" : undefined} className="transition hover:text-gold">
                   {item.label}
                 </Link>
               </li>
@@ -259,12 +271,15 @@ export default function Navbar() {
           </ul>
 
           <button
+            type="button"
             className="flex h-10 w-10 items-center justify-center rounded-full border border-current/20 lg:hidden"
             onClick={() => setOpen((previous) => !previous)}
             aria-label="باز و بسته کردن منوی موبایل"
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
           >
             <span className="sr-only">منو</span>
-            <div className="space-y-1.5">
+            <div className="space-y-1.5" aria-hidden="true">
               <span className="block h-0.5 w-6 bg-current"></span>
               <span className="block h-0.5 w-4 bg-current"></span>
               <span className="block h-0.5 w-5 bg-current"></span>
@@ -274,8 +289,8 @@ export default function Navbar() {
       </div>
 
       {open ? (
-        <div dir="rtl" className="border-t border-slate-200 bg-white px-4 py-4 shadow-lg lg:hidden">
-          <div className="mb-3 rounded-lg bg-ivory px-3 py-2 text-sm font-semibold text-navy">
+        <div id="mobile-navigation" dir="rtl" className="border-t border-slate-200 bg-white px-4 py-4 shadow-lg lg:hidden">
+          <div className="mb-3 rounded-lg bg-ivory px-3 py-2 text-sm font-semibold text-navy" aria-live="polite">
             قیمت روز طلا:
             <span className="mr-2 text-gold">{goldPriceText}</span>
           </div>
@@ -303,6 +318,7 @@ export default function Navbar() {
               <li key={item.label}>
                 <Link
                   href={item.href}
+                  aria-current={pathname === item.href ? "page" : undefined}
                   className="block rounded-lg px-3 py-2 transition hover:bg-ivory"
                   onClick={() => setOpen(false)}
                 >

@@ -88,8 +88,11 @@ export default function CartProvider({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    setRawLines(readStoredCart());
-    setIsReady(true);
+    const timer = window.setTimeout(() => {
+      setRawLines(readStoredCart());
+      setIsReady(true);
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {

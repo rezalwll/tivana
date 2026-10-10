@@ -25,18 +25,30 @@ export default function ProductCard({ product }: Props) {
   );
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl bg-white shadow shadow-black/5 transition ">
-      <div className="relative h-56 w-full overflow-hidden">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-          className="h-full w-full object-cover transition duration-500"
-        />
+    <article className="group relative overflow-hidden rounded-[1.75rem] border border-black/[0.04] bg-white shadow-sm transition duration-500 hover:-translate-y-1 hover:shadow-luxe">
+      <div className="relative aspect-[4/4.4] w-full overflow-hidden bg-[#eee9df]">
+        <Link href={`/product/${product.id}`} className="absolute inset-0 block">
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+            className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]"
+          />
+        </Link>
+
+        <div className="absolute right-3 top-3 flex flex-col items-end gap-2">
+          {product.isNew ? (
+            <span className="rounded-full bg-navy px-3 py-1 text-[10px] font-semibold text-white">جدید</span>
+          ) : null}
+          <span className="rounded-full bg-white/90 px-3 py-1 text-[10px] font-semibold text-navy backdrop-blur">
+            {product.status}
+          </span>
+        </div>
 
         <div className="absolute left-3 top-3 flex flex-col gap-2">
           <button
+            type="button"
             onClick={() => toggleFavorite(product.id)}
             aria-pressed={favorite}
             aria-label={favorite ? "حذف از علاقه‌مندی" : "افزودن به علاقه‌مندی"}
@@ -60,6 +72,7 @@ export default function ProductCard({ product }: Props) {
           </button>
 
           <button
+            type="button"
             onClick={() => addItem(product.id)}
             aria-label={inCart ? "افزایش تعداد در سبد" : "افزودن به سبد"}
             className={`flex h-10 w-10 items-center justify-center rounded-full bg-white/85 transition hover:bg-white ${inCart ? "text-gold" : "text-slate-800"
@@ -89,9 +102,18 @@ export default function ProductCard({ product }: Props) {
         </div>
       </div>
 
-      <div className="space-y-2 px-4 py-4">
-        <h3 className="line-clamp-1 text-base font-semibold text-slate-900">{product.name}</h3>
-        <p className="text-sm text-slate-500">طلای 18 عیار · گالری تیوانا</p>
+      <div className="space-y-3 px-4 py-5">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <Link href={`/product/${product.id}`}>
+              <h3 className="line-clamp-1 text-base font-semibold text-slate-900 transition hover:text-gold">{product.name}</h3>
+            </Link>
+            <p className="mt-1 text-xs text-slate-500">کد {product.code}</p>
+          </div>
+          <span className="whitespace-nowrap rounded-full bg-ivory px-2.5 py-1 text-[11px] text-slate-600">
+            {new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 2 }).format(product.weight)} گرم
+          </span>
+        </div>
 
         <div className="flex items-center justify-between gap-2 pt-2">
           <span className="text-lg font-semibold text-navy">
@@ -109,13 +131,16 @@ export default function ProductCard({ product }: Props) {
             <button
               type="button"
               onClick={() => addItem(product.id)}
-              className="rounded-full bg-ivory px-3 py-1 text-xs font-semibold text-slate-700 transition hover:bg-gold/10 hover:text-gold"
+              className="rounded-full bg-navy px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-gold hover:text-navy"
             >
               افزودن
             </button>
           )}
         </div>
       </div>
-    </div>
+      <p className="border-t border-slate-100 px-4 py-3 text-[11px] leading-5 text-slate-400">
+        قیمت نهایی پس از تأیید وزن و نرخ روز اعلام می‌شود.
+      </p>
+    </article>
   );
 }

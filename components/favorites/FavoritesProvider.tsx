@@ -65,8 +65,11 @@ export default function FavoritesProvider({ children }: { children: ReactNode })
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    setFavoriteIds(readStoredFavorites());
-    setIsReady(true);
+    const timer = window.setTimeout(() => {
+      setFavoriteIds(readStoredFavorites());
+      setIsReady(true);
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -134,4 +137,3 @@ export const useFavorites = () => {
   }
   return context;
 };
-

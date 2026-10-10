@@ -1,235 +1,148 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
 import ProductCard from "@/components/home/ProductCard";
-import { categories, products } from "@/data/products";
+import { categories, featuredProducts } from "@/data/products";
 
-const sectionNotes: Record<string, string> = {
-  earring: "گوشواره‌های منتخب با طراحی مینیمال و مناسب استفاده روزمره.",
-  necklace: "گردنبندهای ظریف و کلاسیک برای استایل رسمی و روزانه.",
-  bracelet: "دستبندهای خاص با پرداخت دقیق و طراحی دست‌ساز.",
-  ring: "انگشترهای نگین‌دار و ساده برای هدیه و استفاده شخصی.",
-  parsian: "شمش‌های پارسیان برای هدیه و سرمایه‌گذاری مطمئن.",
-};
+const assurances = [
+  { title: "طلای ۱۸ عیار", text: "مشخصات عیار و وزن هر قطعه پیش از خرید شفاف اعلام می‌شود." },
+  { title: "فاکتور معتبر", text: "اطلاعات قطعه و جزئیات قیمت در فاکتور خرید درج خواهد شد." },
+  { title: "ارسال امن", text: "نحوه و زمان ارسال پیش از تأیید نهایی سفارش با شما هماهنگ می‌شود." },
+  { title: "مشاوره انتخاب", text: "برای انتخاب سایز، هدیه یا مقایسه مدل‌ها همراهتان هستیم." },
+];
 
-type Category = (typeof categories)[number];
-
-function CategoryCard({ cat }: { cat: Category }) {
-  return (
-    <Link
-      href={`/category/${cat.slug}`}
-      className="group block w-full overflow-hidden hover:bg-gold/30 rounded-3xl bg-white p-4 text-right shadow-sm transition duration-300"
-    >
-      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-        <Image
-          src={cat.image}
-          alt={cat.name}
-          fill
-          className="object-cover transition-transform duration-500"
-        />
-      </div>
-
-      <p className="mt-4 text-center text-sm font-semibold text-slate-800">{cat.name}</p>
-    </Link>
-  );
-}
+const steps = [
+  ["۱", "انتخاب مدل", "محصولات را بر اساس دسته، وزن و بودجه بررسی کنید."],
+  ["۲", "ثبت درخواست", "محصول را به سبد اضافه کنید و اطلاعات تماس را بفرستید."],
+  ["۳", "تأیید نهایی", "موجودی، وزن و قیمت روز پیش از پرداخت با شما قطعی می‌شود."],
+];
 
 export default function HomePage() {
-  const mainCategories = categories.slice(0, 4);
-  const sliderRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const dragState = useRef({
-    isDragging: false,
-    startX: 0,
-    scrollLeft: 0,
-    hasMoved: false,
-  });
-
-  const scrollCategory = (slug: string, direction: "prev" | "next") => {
-    const container = sliderRefs.current[slug];
-    if (!container) return;
-
-    const scrollAmount = container.clientWidth * 0.8;
-    const offset = direction === "next" ? scrollAmount : -scrollAmount;
-    container.scrollBy({ left: offset, behavior: "smooth" });
-  };
-
-  const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.button !== 0) return;
-    const container = event.currentTarget;
-    dragState.current.isDragging = true;
-    dragState.current.startX = event.clientX;
-    dragState.current.scrollLeft = container.scrollLeft;
-    dragState.current.hasMoved = false;
-    container.setPointerCapture(event.pointerId);
-  };
-
-  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragState.current.isDragging) return;
-    const container = event.currentTarget;
-    const delta = event.clientX - dragState.current.startX;
-    if (Math.abs(delta) > 4) {
-      dragState.current.hasMoved = true;
-    }
-    container.scrollLeft = dragState.current.scrollLeft - delta;
-    event.preventDefault();
-  };
-
-  const handlePointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragState.current.isDragging) return;
-    dragState.current.isDragging = false;
-    event.currentTarget.releasePointerCapture(event.pointerId);
-  };
-
-  const handlePointerCancel = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragState.current.isDragging) return;
-    dragState.current.isDragging = false;
-    event.currentTarget.releasePointerCapture(event.pointerId);
-  };
-
-  const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
-
-  const handleClickCapture = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!dragState.current.hasMoved) return;
-    event.preventDefault();
-    event.stopPropagation();
-    dragState.current.hasMoved = false;
-  };
-
   return (
-    <div className="space-y-24 pb-20">
-      <section className="relative isolate -mt-28 min-h-[100vh] overflow-hidden bg-[url('/images/main-section-bg.png')] bg-cover bg-center bg-fixed pt-28 lg:-mt-32 lg:pt-32">
-        <div className="relative mx-auto pl-[100px] sm:pl-[300px] lg:pl-[500px] xl:pl-[700px]">
-          <div className="flex flex-col items-center">
-            <Image src="/images/tivanalogo.png" alt="Tivana logo" width={200} height={200} />
-            <p className="pb-5 text-xl font-semibold text-gold sm:text-3xl lg:text-4xl">
-              Tivana gold gallery
+    <div className="pb-24">
+      <section className="relative -mt-28 min-h-[92vh] overflow-hidden bg-navy pt-28 lg:-mt-32 lg:pt-32">
+        <Image
+          src="/images/main-section-bg.webp"
+          alt="مدل با زیورآلات طلای تیوانا"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[38%_center] opacity-90"
+        />
+        <div className="absolute inset-0 bg-gradient-to-l from-navy/10 via-navy/20 to-navy/90" />
+        <div className="relative mx-auto flex min-h-[calc(92vh-7rem)] max-w-7xl items-center px-5 py-20 sm:px-8">
+          <div className="max-w-xl text-white">
+            <span className="inline-flex rounded-full border border-gold/40 bg-navy/30 px-4 py-2 text-xs font-semibold text-gold backdrop-blur">
+              جواهراتی برای هر روز، ارزشمند برای همیشه
+            </span>
+            <h1 className="mt-7 text-4xl font-bold leading-[1.5] sm:text-5xl lg:text-6xl">
+              درخششِ ساده،
+              <span className="block text-gold">به سبک تیوانا</span>
+            </h1>
+            <p className="mt-6 max-w-lg text-sm leading-8 text-slate-200 sm:text-base">
+              کلکسیونی از زیورآلات طلای ۱۸ عیار با طراحی ظریف و امروزی؛ برای هدیه، استفاده روزمره و لحظه‌هایی که می‌خواهید ماندگار شوند.
             </p>
-          </div>
-        </div>
-      </section>
-
-      <section id="categories" className="w-full bg-[#f7f7f7] py-16" dir="rtl">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="text-center">
-            <h2 className="mt-2 text-3xl font-bold text-navy">کلکسیون‌های طلای تیوانا</h2>
-
-          </div>
-
-          <div className="mt-10 grid gap-8 md:grid-cols-2">
-            <div className="space-y-8">
-              {mainCategories.slice(0, 2).map((cat) => (
-                <CategoryCard key={cat.slug} cat={cat} />
-              ))}
-            </div>
-
-            <div className="space-y-8 md:mt-12">
-              {mainCategories.slice(2, 4).map((cat) => (
-                <CategoryCard key={cat.slug} cat={cat} />
-              ))}
+            <div className="mt-9 flex flex-wrap gap-3">
+              <Link href="/shop" className="rounded-full bg-gold px-7 py-3.5 text-sm font-semibold text-navy transition hover:bg-[#e4c766]">
+                مشاهده فروشگاه
+              </Link>
+              <Link href="/#collections" className="rounded-full border border-white/30 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10">
+                دیدن کلکسیون‌ها
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      <section
-        id="brand-story"
-        className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 md:grid-cols-2"
-      >
-        <div className="space-y-5">
-          <p className="text-sm font-semibold text-gold">هنر دست‌ساز</p>
-          <h3 className="text-3xl font-bold text-navy">داستان طلای تیوانا</h3>
-          <p className="text-base leading-9 text-slate-600">
-            در کارگاه تیوانا، هر قطعه طلا قبل از رسیدن به ویترین، مسیر دقیقی از طراحی تا
-            پرداخت نهایی را طی می‌کند. ترکیب تکنیک‌های سنتی و سلیقه مدرن باعث می‌شود هر
-            محصول، ظاهری ماندگار و اصیل داشته باشد.
-          </p>
-          <p className="text-base leading-9 text-slate-600">
-            هدف ما فقط فروش یک محصول نیست؛ می‌خواهیم تجربه خریدی مطمئن و شفاف بسازیم تا
-            انتخاب طلا برای شما ساده، امن و لذت‌بخش باشد.
-          </p>
-        </div>
-        <div className="relative h-full min-h-[80vh] overflow-hidden rounded-3xl bg-gradient-to-br from-ivory to-white shadow-lg shadow-black/5">
-          <div className="absolute inset-0 bg-[url('/images/storyoftivana.png')] bg-cover bg-center mix-blend-multiply" />
-          <div className="absolute inset-0 bg-gradient-to-tr from-navy/70 via-navy/10 to-transparent" />
-          <div className="absolute left-6 top-6 flex flex-col gap-2">
-            <span className="h-1 w-12 rounded-full bg-gold" />
-            <span className="h-1 w-10 rounded-full bg-gold/70" />
-            <span className="h-1 w-8 rounded-full bg-gold/50" />
-          </div>
+      <section className="relative z-10 mx-auto -mt-10 max-w-7xl px-4">
+        <div className="grid overflow-hidden rounded-[2rem] border border-black/[0.04] bg-white shadow-luxe sm:grid-cols-2 lg:grid-cols-4">
+          {assurances.map((item, index) => (
+            <div key={item.title} className={`p-6 ${index ? "border-t border-slate-100 sm:border-r sm:border-t-0" : ""}`}>
+              <div className="mb-4 h-1 w-9 rounded-full bg-gold" />
+              <h2 className="text-sm font-bold text-navy">{item.title}</h2>
+              <p className="mt-2 text-xs leading-6 text-slate-500">{item.text}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      <section className="space-y-16">
-        {categories.map((cat) => {
-          const slug = cat.slug;
-          const title = cat.name;
-          const list = products.filter((product) => product.category === slug);
-
-          return (
-            <div key={slug} className="mx-auto max-w-6xl px-4" dir="rtl">
-              <div className="mb-6 flex items-center justify-between gap-4">
-                <div>
-                
-                  <h3 className="text-2xl font-bold text-navy">{title}</h3>
-                  <p className="text-sm text-slate-600">
-                    {sectionNotes[slug] ?? "منتخبی از محصولات این دسته‌بندی"}
-                  </p>
-                </div>
-                <Link
-                  href={`/category/${slug}`}
-                  className="text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-8 transition hover:text-gold"
-                >
-                  مشاهده همه
-                </Link>
-              </div>
-
-              <div className="relative">
-                <div
-                  ref={(el) => (sliderRefs.current[slug] = el)}
-                  className="no-scrollbar flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-3 cursor-grab select-none active:cursor-grabbing"
-                  onPointerDown={handlePointerDown}
-                  onPointerMove={handlePointerMove}
-                  onPointerUp={handlePointerUp}
-                  onPointerCancel={handlePointerCancel}
-                  onDragStartCapture={handleDragStart}
-                  onClickCapture={handleClickCapture}
-                >
-                  {list.map((product) => (
-                    <div
-                      key={product.id}
-                      className="snap-start shrink-0 basis-full sm:basis-[calc((100%-1rem)/2)] lg:basis-[calc((100%-3rem)/4)]"
-                    >
-                      <ProductCard product={product} />
-                    </div>
-                  ))}
-                </div>
-
-                <div className="pointer-events-none absolute inset-y-0 left-0 right-0 hidden items-center justify-between md:flex">
-                  <button
-                    type="button"
-                    onClick={() => scrollCategory(slug, "next")}
-                    className="pointer-events-auto mx-1 flex h-10 w-10 items-center justify-center rounded-full border text-lg transition border-gold text-gold hover:bg-gold hover:text-black"
-                    aria-label="Previous products"
-                  >
-                    &lt;
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => scrollCategory(slug, "prev")}
-                    className="pointer-events-auto mx-1 flex h-10 w-10 items-center justify-center rounded-full border text-lg transition border-gold text-gold hover:bg-gold hover:text-black"
-                    aria-label="Next products"
-                  >
-                    &gt;
-                  </button>
+      <section id="collections" className="mx-auto max-w-7xl px-4 pt-28">
+        <div className="mb-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <p className="text-xs font-semibold tracking-[0.2em] text-gold">TIVANA COLLECTIONS</p>
+            <h2 className="mt-3 text-3xl font-bold text-navy sm:text-4xl">کلکسیون‌ها</h2>
+            <p className="mt-3 text-sm leading-7 text-slate-500">برای هر سلیقه و هر مناسبت، یک انتخاب درخشان.</p>
+          </div>
+          <Link href="/shop" className="text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-8">همه محصولات</Link>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-12">
+          {categories.map((category, index) => (
+            <Link
+              key={category.slug}
+              href={`/category/${category.slug}`}
+              className={`group relative min-h-[24rem] overflow-hidden rounded-[2rem] bg-slate-200 ${index < 2 ? "lg:col-span-6" : "lg:col-span-4"}`}
+            >
+              <Image src={category.image} alt={category.name} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/5 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
+                <p className="text-xs text-gold">کلکسیون تیوانا</p>
+                <div className="mt-2 flex items-end justify-between gap-4">
+                  <div>
+                    <h3 className="text-2xl font-bold">{category.name}</h3>
+                    <p className="mt-2 text-xs leading-6 text-slate-200">{category.shortDescription}</p>
+                  </div>
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/30 text-xl transition group-hover:bg-gold group-hover:text-navy">←</span>
                 </div>
               </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 pt-28">
+        <div className="mb-10 text-center">
+          <p className="text-xs font-semibold tracking-[0.2em] text-gold">SELECTED FOR YOU</p>
+          <h2 className="mt-3 text-3xl font-bold text-navy sm:text-4xl">منتخب تیوانا</h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-slate-500">محبوب‌ترین مدل‌های این فصل، با مشخصات کامل و امکان ثبت درخواست خرید.</p>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {featuredProducts.slice(0, 8).map((product) => <ProductCard key={product.id} product={product} />)}
+        </div>
+      </section>
+
+      <section className="mx-auto mt-28 grid max-w-7xl overflow-hidden rounded-[2.5rem] bg-navy lg:grid-cols-2">
+        <div className="relative min-h-[32rem]">
+          <Image src="/images/storyoftivana.webp" alt="داستان و نگاه طراحی تیوانا" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy/30 to-transparent" />
+        </div>
+        <div className="flex items-center px-7 py-14 text-white sm:px-14 lg:px-16">
+          <div>
+            <p className="text-xs font-semibold tracking-[0.2em] text-gold">OUR STORY</p>
+            <h2 className="mt-4 text-3xl font-bold leading-[1.5]">طلا، وقتی با سادگی معنا پیدا می‌کند</h2>
+            <p className="mt-6 text-sm leading-8 text-slate-300">
+              تیوانا با نگاه به زیبایی ماندگار شکل گرفته است؛ قطعاتی که فقط برای یک مراسم نیستند و می‌توانند بخشی از زندگی روزمره شما شوند. فرم‌های ساده، تناسب دقیق و انتخاب آگاهانه، زبان طراحی این مجموعه‌اند.
+            </p>
+            <Link href="/about" className="mt-8 inline-flex items-center gap-3 text-sm font-semibold text-gold">بیشتر درباره تیوانا <span>←</span></Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 pt-28">
+        <div className="text-center">
+          <p className="text-xs font-semibold tracking-[0.2em] text-gold">SIMPLE &amp; CLEAR</p>
+          <h2 className="mt-3 text-3xl font-bold text-navy">مسیر خرید از تیوانا</h2>
+        </div>
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {steps.map(([number, title, text]) => (
+            <div key={number} className="rounded-[2rem] border border-slate-200/80 bg-white p-7">
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gold/15 text-sm font-bold text-gold">{number}</span>
+              <h3 className="mt-6 text-lg font-bold text-navy">{title}</h3>
+              <p className="mt-3 text-sm leading-7 text-slate-500">{text}</p>
             </div>
-          );
-        })}
+          ))}
+        </div>
+        <div className="mt-8 text-center">
+          <Link href="/guide" className="inline-flex rounded-full border border-navy px-6 py-3 text-sm font-semibold text-navy transition hover:bg-navy hover:text-white">راهنمای کامل خرید</Link>
+        </div>
       </section>
     </div>
   );

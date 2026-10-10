@@ -1,27 +1,31 @@
 {
-  "name": "taj-gold-gallery",
+  "name": "tivana-gold-gallery",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "release:check": "node scripts/release-check.mjs",
+    "release:verify": "npm run release:check && npm run lint && npm run typecheck && npm run build && npm audit --omit=dev"
   },
   "dependencies": {
-    "next": "14.1.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "next": "16.4.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "source-map-js": "1.2.2"
   },
   "devDependencies": {
     "@types/node": "20.9.1",
-    "@types/react": "18.2.33",
-    "@types/react-dom": "18.2.14",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
     "autoprefixer": "10.4.16",
-    "eslint": "8.54.0",
-    "eslint-config-next": "14.1.0",
-    "postcss": "8.4.31",
-    "tailwindcss": "3.3.5",
+    "eslint": "9.39.1",
+    "eslint-config-next": "16.4.0",
+    "postcss": "8.5.23",
+    "tailwindcss": "3.4.19",
     "typescript": "5.2.2"
   }
 }
