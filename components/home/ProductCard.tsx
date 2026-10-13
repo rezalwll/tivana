@@ -9,9 +9,10 @@ import { useFavorites } from "@/components/favorites/FavoritesProvider";
 
 type Props = {
   product: Product;
+  priority?: boolean;
 };
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({ product, priority = false }: Props) {
   const { addItem, getItemQuantity } = useCart();
   const { isFavorite, toggleFavorite } = useFavorites();
 
@@ -32,6 +33,7 @@ export default function ProductCard({ product }: Props) {
             src={product.image}
             alt={product.name}
             fill
+            priority={priority}
             sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
             className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]"
           />
@@ -109,6 +111,7 @@ export default function ProductCard({ product }: Props) {
               <h3 className="line-clamp-1 text-base font-semibold text-slate-900 transition hover:text-gold">{product.name}</h3>
             </Link>
             <p className="mt-1 text-xs text-slate-500">کد {product.code}</p>
+            <p className="mt-2 text-[11px] font-medium text-gold">{product.style}</p>
           </div>
           <span className="whitespace-nowrap rounded-full bg-ivory px-2.5 py-1 text-[11px] text-slate-600">
             {new Intl.NumberFormat("fa-IR", { maximumFractionDigits: 2 }).format(product.weight)} گرم

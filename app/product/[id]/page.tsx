@@ -100,6 +100,11 @@ export default async function ProductPage({ params }: Props) {
             <p className="text-xs font-semibold tracking-[.2em] text-gold">TIVANA · {product.code}</p>
             <h1 className="mt-4 text-3xl font-bold text-navy sm:text-4xl">{product.name}</h1>
             <p className="mt-5 text-sm leading-8 text-slate-600">{product.description}</p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              <span className="rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-navy shadow-sm">{product.style}</span>
+              <span className="rounded-full bg-white px-3 py-1.5 text-xs text-slate-600 shadow-sm">{product.category === "parsian" ? "پلمب محافظ" : "بدون نگین"}</span>
+              <span className="rounded-full bg-white px-3 py-1.5 text-xs text-slate-600 shadow-sm">{product.category === "parsian" ? "طلای ۱۸ عیار" : "طراحی تیوانا"}</span>
+            </div>
             <div className="mt-7 flex items-end justify-between gap-4 border-y border-slate-200 py-6">
               <div>
                 <p className="text-xs text-slate-500">قیمت فعلی کاتالوگ</p>
@@ -124,18 +129,38 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="mt-16 grid gap-6 md:grid-cols-2">
+      <section className="mt-16 grid gap-6 lg:grid-cols-[.85fr_1.15fr]">
         <div className="rounded-[2rem] bg-white p-7 sm:p-9">
           <h2 className="text-xl font-bold text-navy">ویژگی‌های محصول</h2>
           <ul className="mt-5 space-y-3 text-sm text-slate-600">
             {product.features.map((feature) => <li key={feature} className="flex items-center gap-3"><span className="h-2 w-2 rounded-full bg-gold" />{feature}</li>)}
           </ul>
         </div>
-        <div className="rounded-[2rem] bg-navy p-7 text-white sm:p-9">
-          <h2 className="text-xl font-bold text-gold">پیش از ثبت درخواست</h2>
-          <p className="mt-4 text-sm leading-8 text-slate-300">برای انگشتر و دستبند، سایز مناسب را بررسی کنید. سفارش‌های سفارشی پس از تأیید طرح، رنگ و زمان ساخت نهایی می‌شوند.</p>
+        <div className="rounded-[2rem] bg-white p-7 sm:p-9">
+          <h2 className="text-xl font-bold text-navy">جزئیات و ابعاد</h2>
+          <dl className="mt-5 grid gap-x-7 sm:grid-cols-2">
+            {product.details.map((detail) => (
+              <div key={detail.label} className="flex items-center justify-between gap-4 border-b border-slate-100 py-4 text-sm">
+                <dt className="text-slate-400">{detail.label}</dt>
+                <dd className="font-semibold text-navy">{detail.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      <section className="mt-6 grid overflow-hidden rounded-[2rem] bg-navy text-white md:grid-cols-2">
+        <div className="p-7 sm:p-9">
+          <p className="text-xs font-semibold text-gold">پیشنهاد استایل</p>
+          <h2 className="mt-3 text-xl font-bold">چطور استفاده کنیم؟</h2>
+          <p className="mt-4 text-sm leading-8 text-slate-300">{product.styling}</p>
+        </div>
+        <div className="border-t border-white/10 p-7 sm:p-9 md:border-r md:border-t-0">
+          <p className="text-xs font-semibold text-gold">مراقبت از محصول</p>
+          <h2 className="mt-3 text-xl font-bold">درخشش ماندگار</h2>
+          <p className="mt-4 text-sm leading-8 text-slate-300">{product.care}</p>
           <div className="mt-6 flex flex-wrap gap-4 text-sm font-semibold">
-            <Link href="/guide#size" className="text-gold">راهنمای سایز ←</Link>
+            <Link href="/guide#care" className="text-gold">راهنمای نگهداری ←</Link>
             <Link href="/shipping" className="text-gold">شرایط ارسال ←</Link>
           </div>
         </div>
